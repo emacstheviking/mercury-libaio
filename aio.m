@@ -14,7 +14,7 @@
 :- interface.
 
 % Comment out for library build!
-%:- pred main(io::di, io::uo) is det.
+% :- pred main(io::di, io::uo) is det.
 
 :- import_module bool.
 :- import_module io.
@@ -25,7 +25,7 @@
     % API: stdout/stderror output.
 
 :- func chromakey(string::in) = (string::out) is det.
-:- pred enable_colours(bool::in) is det.
+:- pred enable_colours(bool::in, io::di, io::uo) is det.
 
 :- pred error(string::in, list(poly_type)::in, io::di, io::uo) is det.
 :- pragma format_call(pred(error/4), format_string_values(1, 2)).
@@ -76,17 +76,15 @@
                 f_quiet  :: bool     % All output suppressed?
             ).
 
-:- mutable(astate, aio_state, aio_state(yes, no), ground, [untrailed]).
+:- mutable(astate, aio_state, aio_state(yes, no), ground, [untrailed, attach_to_io_state]).
 
 %----------------------------------------------------------------------------%
 
     % Enable or disable colour output.
     %
-:- pragma promise_pure(enable_colours/1).
-
-enable_colours(Mode) :-
-    semipure get_astate(aio_state(_, Quiet)),
-    impure set_astate(aio_state(Mode, Quiet)).
+enable_colours(Mode, !IO) :-
+    get_astate(aio_state(_, Quiet), !IO),
+    set_astate(aio_state(Mode, Quiet), !IO).
 
 %----------------------------------------------------------------------------%
 
@@ -237,10 +235,10 @@ monokey(In) = Out :-
 % MAIN -- for development.
 % Uncomment this and the interface declaration for local dev:
 %     $ mmc --make aio
-%
+
 % main(!IO) :-
 %     aio.format("@bp: @tk: @cr: @:) @:| @:( \n", [], !IO),
-%     enable_colours(no),
+%     enable_colours(no, !IO),
 %     aio.format("@bp: @tk: @cr: @:) @:| @:( \n", [], !IO).
 
 
