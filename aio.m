@@ -146,15 +146,6 @@ reset(!IO) :- io.format("\u001b[0m]", [], !IO).
 clr(!IO) :- io.format("\u001b[2J", [], !IO).
 at_xy(X, Y, !IO) :- io.format("\u001b[%i;%iH", [ i(Y), i(X)], !IO).
 
-:- pragma inline(black/2).
-:- pragma inline(red/2).
-:- pragma inline(green/2).
-:- pragma inline(yellow/2).
-:- pragma inline(blue/2).
-:- pragma inline(magenta/2).
-:- pragma inline(cyan/2).
-:- pragma inline(white/2).
-
 black(!IO) :- cout(30, !IO).
 red(!IO) :- cout(31, !IO).
 green(!IO) :- cout(32, !IO).
@@ -164,15 +155,6 @@ magenta(!IO) :- cout(35, !IO).
 cyan(!IO) :- cout(36, !IO).
 white(!IO) :- cout(37, !IO).
 default(!IO) :- cout(39, !IO).
-
-:- pragma inline(black/2).
-:- pragma inline(red/2).
-:- pragma inline(green/2).
-:- pragma inline(yellow/2).
-:- pragma inline(blue/2).
-:- pragma inline(magenta/2).
-:- pragma inline(cyan/2).
-:- pragma inline(white/2).
 
 blackbg(!IO) :- cout(40, !IO).
 redbg(!IO) :- cout(41, !IO).
